@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/herreralemus03/shopping-app-properties.git
+          username: herreralemus03
+          password: ${GITHUB_TOKEN}
+          default-label: master
+          encoding: UTF-8
+
+server:
+  servlet:
+    context-path: /config-server
+  port: 8888
+
+eureka:
+  instance:
+    hostname: ${HOSTNAME}
+    leaseRenewalIntervalInSeconds: 30
+    client:
+      serviceUrl:
+        defaultZone: http://localhost:8761/eureka
+        register-with-eureka: true
+        fetch-registry: true

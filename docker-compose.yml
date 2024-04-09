@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    build:
+      context: ./eureka
+      dockerfile: Dockerfile
+    image: eureka-server-img
+    ports:
+      - "8761:8761"
+    networks:
+      - spring_network
+    depends_on:
+      - config-server
+
+  auth-service:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    image: auth-service-img
+    ports:
+      - "9000:9000"
+    networks:
+      - spring_network
+    depends_on:
+      - eureka-server
+      - config-server
+
+  config-server:
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    image: config-server-img
+    ports:
+      - "8888:8888"
+    networks:
+      - spring_network
+
+  order-service:
+    build:
+      context: ./orders
+      dockerfile: Dockerfile
+    image: order-service-img
+    ports:
+      - "8080:8080"
+    networks:
+      - spring_network
+    depends_on:
+      - config-server
+      - eureka-server
+
+  payment-service:
+    build:
+      context: ./payment
+      dockerfile: Dockerfile
+    image: payment-service-img
+    ports:
+      - "8081:8081"
+    networks:
+      - spring_network
+    depends_on:
+      - eureka-server
+      - config-server
+
+networks:
+  spring_network:
+    driver: bridge

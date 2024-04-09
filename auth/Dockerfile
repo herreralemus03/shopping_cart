@@ -1,10 +1,8 @@
 FROM openjdk:17-alpine
 
-WORKDIR /app
-
-COPY target/*.jar /app/app.jar
-COPY ./src/main/resources/ /app/
+COPY target/*.jar /app.jar
+ADD src/main/resources/bootstrap-dev.yml /bootstrap-dev.yml
 
 EXPOSE 9000
 
-CMD ["java", "-Djava.security.egd=file:/dev/./urandom --spring.config.location=classpath:file:/app/bootstrap.yml", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

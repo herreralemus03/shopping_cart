@@ -24,6 +24,10 @@ public class ShippingArticle {
     @Column(name = "amount")
     private Long amount;
 
+    @Getter @Setter
+    @Column(name = "product_data")
+    private String productData;
+
     @ManyToOne
     @Getter @Setter
     @JoinColumn(name = "id_shipping", referencedColumnName = "id")

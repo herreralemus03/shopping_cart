@@ -15,5 +15,5 @@ public class ShippingArticleDto {
     UUID id;
     String articleNotes;
     Long amount;
-    ProductDto product;
+    ProductDto productData;
 }

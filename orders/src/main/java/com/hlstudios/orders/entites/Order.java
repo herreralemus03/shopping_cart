@@ -31,9 +31,4 @@ public class Order {
     @Getter @Setter
     @OneToMany(mappedBy = "order")
     List<OrderShipping> orderShipping;
-
-    @Getter @Setter
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "creation_date")
-    Date creationDate;
 }

@@ -36,14 +36,7 @@ public class Product {
     @Column(name = "price")
     Float price;
 
-    @ManyToOne
     @Getter @Setter
-    @JoinColumn(name = "id_store", referencedColumnName = "id")
-    Store store;
-
-    @ManyToOne
-    @Getter @Setter
-    @JoinColumn(name = "id_product_sub_category", referencedColumnName = "id")
-    ProductSubCategory productSubCategory;
-
+    @Column(name = "category")
+    String category;
 }

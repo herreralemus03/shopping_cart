@@ -4,8 +4,8 @@ services:
   eureka-server:
     build:
       context: ./eureka
-      dockerfile: ./eureka/Dockerfile
-    image: eureka-server-img
+      dockerfile: Dockerfile
+    image: eureka-server-img:0.0.1
     ports:
       - "8761:8761"
     networks:
@@ -18,8 +18,8 @@ services:
   auth-service:
     build:
       context: ./auth
-      dockerfile: ./auth/Dockerfile
-    image: auth-service-img
+      dockerfile: Dockerfile
+    image: auth-service-img:0.0.1
     ports:
       - "9000:9000"
     networks:
@@ -32,25 +32,23 @@ services:
   config-server:
     build:
       context: ./config-server
-      dockerfile: ./config-server/Dockerfile
-    image: config-server-img
+      dockerfile: Dockerfile
+    image: config-server-img:0.0.1
     ports:
       - "8888:8888"
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - GITHUB_TOKEN=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
+      - GITHUB_TOKEN=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
     networks:
       - spring_network
 
   order-service:
     build:
       context: ./orders
-      dockerfile: ./orders/Dockerfile
-    image: order-service-img
+      dockerfile: Dockerfile
+    image: order-service-img:0.0.1
     ports:
       - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
     networks:
       - spring_network
     depends_on:
@@ -61,8 +59,8 @@ services:
   payment-service:
     build:
       context: ./payment
-      dockerfile: ./payment/Dockerfile
-    image: payment-service-img
+      dockerfile: Dockerfile
+    image: payment-service-img:0.0.1
     ports:
       - "8081:8081"
     networks:
@@ -71,6 +69,7 @@ services:
       - eureka-server
       - config-server
       - postgres
+
   postgres:
     image: postgres:latest
     ports:
@@ -79,8 +78,15 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=postgres
+    networks:
+      - spring_network
     volumes:
       - ./initial-script.sql:/docker-entrypoint-initdb.d/initial-script.sql
+      - postgres-data:/var/lib/postgresql/data
+
 networks:
   spring_network:
-    driver: bridge
+    external: true
+
+volumes:
+  postgres-data:

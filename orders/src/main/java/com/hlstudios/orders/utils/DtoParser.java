@@ -1,5 +1,7 @@
 package com.hlstudios.orders.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hlstudios.orders.dto.*;
 import com.hlstudios.orders.entites.*;
 import org.modelmapper.ModelMapper;
@@ -32,7 +34,7 @@ public class DtoParser {
                 .country(modelMapper.map(order.getCountry(), CountryDto.class))
                 .store(modelMapper.map(order.getStore(), StoreDto.class))
                 .shipping(orderShippingDtos)
-                .creationDate(Instant.now().toString())
+                //.creationDate(Instant.now().toString())
                 .build();
     }
 
@@ -54,7 +56,7 @@ public class DtoParser {
         return ShippingArticleDto.builder()
                 .id(article.getId())
                 .amount(article.getAmount())
-                .product(modelMapper.map(article.getProduct(), ProductDto.class))
+                .productData(modelMapper.map(article.getProductData(), ProductDto.class))
                 .articleNotes(article.getArticleNotes())
                 .build();
     }
@@ -70,7 +72,7 @@ public class DtoParser {
         order.setStore(modelMapper.map(orderDto.getStore(), Store.class));
         order.setCountry(modelMapper.map(orderDto.getCountry(), Country.class));
         order.setOrderShipping(shipping);
-        order.setCreationDate(Date.from(Instant.now()));
+        //order.setCreationDate(Date.from(Instant.now()));
         return order;
     }
 
@@ -94,12 +96,18 @@ public class DtoParser {
 
     public ShippingArticle parseDtoToArticle(
             ShippingArticleDto articleDto
-    ){
+    ) {
+        ObjectMapper objectMapper = new ObjectMapper();
         ShippingArticle article = new ShippingArticle();
+
+        try {
+            article.setProductData(objectMapper.writeValueAsString(articleDto.getProductData()));
+        } catch (JsonProcessingException e){
+            e.printStackTrace();
+        }
 
         article.setId(articleDto.getId());
         article.setArticleNotes(articleDto.getArticleNotes());
-        article.setProduct(modelMapper.map(articleDto.getProduct(), Product.class));
         article.setAmount(articleDto.getAmount());
 
         return article;

@@ -82,7 +82,7 @@ public class OrderServiceWebImpl implements OrderServiceWeb {
 
     @Override
     public OrderDto createOrder(OrderDto orderDto) {
-        orderDto.setCreationDate(Instant.now().toString());
+        //orderDto.setCreationDate(Instant.now().toString());
         Order order = dtoParser.parseDtoToOrder(orderDto);
         Order result = orderService.add(order);
 

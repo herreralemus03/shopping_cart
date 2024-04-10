@@ -18,10 +18,4 @@ public class OrderDto {
     private StoreDto store;
     @Getter @Setter
     private List<OrderShippingDto> shipping;
-    @Setter
-    private String creationDate;
-
-    public String getCreationDate(){
-        return Formatter.formatDate("yyyy-MM-dd HH:mm:ss", this.creationDate);
-    }
 }

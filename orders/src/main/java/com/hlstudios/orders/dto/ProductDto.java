@@ -18,4 +18,5 @@ public class ProductDto {
     String weightUnit;
     Float weight;
     Float price;
+    String category;
 }

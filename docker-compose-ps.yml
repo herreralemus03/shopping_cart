@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=postgres
+    networks:
+      - spring_network
+    volumes:
+      - ./initial-script.sql:/docker-entrypoint-initdb.d/initial-script.sql
+      - postgres-data:/var/lib/postgresql/data
+networks:
+  sprint_network:
+    external: true
+volumes:
+    postgres-data:

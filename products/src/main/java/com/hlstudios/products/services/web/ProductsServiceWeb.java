@@ -32,6 +32,10 @@ public class ProductsServiceWeb {
                 .collect(Collectors.toList());
     }
 
+    public ProductDto getProductById(Integer id){
+        return new ProductDto(fakeStoreClient.getProductById(id));
+    }
+
     public List<String> getProductCategories(){
         return fakeStoreClient.getProductCategories();
     }

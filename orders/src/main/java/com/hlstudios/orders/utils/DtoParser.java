@@ -4,23 +4,31 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hlstudios.orders.dto.*;
 import com.hlstudios.orders.entites.*;
+import com.hlstudios.orders.services.clients.ProductsServiceClient;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class DtoParser {
 
     final ModelMapper modelMapper;
+    final ProductsServiceClient productsServiceClient;
 
     public DtoParser(
-            ModelMapper modelMapper
+            ModelMapper modelMapper,
+            ProductsServiceClient productsServiceClient
     ) {
         this.modelMapper = modelMapper;
+        this.productsServiceClient = productsServiceClient;
     }
 
     public OrderDto parseOrderToDto(Order order){
@@ -53,11 +61,21 @@ public class DtoParser {
     }
 
     public ShippingArticleDto parseArticleToDto(ShippingArticle article){
+        ObjectMapper objectMapper = new ObjectMapper();
+        ProductDto productDto = null;
+
+        try {
+            productDto = objectMapper.readValue(article.getProductData(), ProductDto.class);
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage());
+        }
+
         return ShippingArticleDto.builder()
                 .id(article.getId())
                 .amount(article.getAmount())
-                .productData(modelMapper.map(article.getProductData(), ProductDto.class))
+                .productData(productDto)
                 .articleNotes(article.getArticleNotes())
+                .apiId(productDto.getApiId())
                 .build();
     }
 
@@ -100,8 +118,12 @@ public class DtoParser {
         ObjectMapper objectMapper = new ObjectMapper();
         ShippingArticle article = new ShippingArticle();
 
+        ResponseEntity<?> response = productsServiceClient.getProductById(articleDto.getApiId());
+        Map<String, Object> body = (Map<String, Object>) response.getBody();
+        ProductDto productDto = modelMapper.map(body.getOrDefault("body", null), ProductDto.class);
+
         try {
-            article.setProductData(objectMapper.writeValueAsString(articleDto.getProductData()));
+            article.setProductData(objectMapper.writeValueAsString(productDto));
         } catch (JsonProcessingException e){
             e.printStackTrace();
         }

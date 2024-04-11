@@ -16,4 +16,5 @@ public class ShippingArticleDto {
     String articleNotes;
     Long amount;
     ProductDto productData;
+    Long apiId;
 }

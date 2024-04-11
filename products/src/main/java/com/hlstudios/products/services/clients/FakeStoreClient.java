@@ -44,6 +44,20 @@ public class FakeStoreClient {
         return List.of();
     }
 
+    public ProductFakeStore getProductById(Integer id) {
+        UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(URI.concat("/").concat(id.toString()))
+                .build();
+
+        ProductFakeStore product = restTemplate.exchange(
+                uriComponents.toUriString(),
+                HttpMethod.GET,
+                null,
+                ProductFakeStore.class
+        ).getBody();
+
+        return product;
+    }
+
     public List<ProductFakeStore> getAllProductsByCategory(Integer limit, String sort, String category) {
         UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(URI.concat("/category/").concat(category))
                 .queryParam("limit", limit)

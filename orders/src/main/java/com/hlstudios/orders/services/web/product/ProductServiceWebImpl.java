@@ -4,7 +4,6 @@ import com.hlstudios.orders.dto.ProductDto;
 import com.hlstudios.orders.entites.Product;
 import com.hlstudios.orders.services.datasource.product.ProductService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;

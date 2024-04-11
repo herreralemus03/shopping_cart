@@ -3,10 +3,7 @@ package com.hlstudios.products.controllers;
 import com.hlstudios.products.dto.ProductDto;
 import com.hlstudios.products.services.web.ProductsServiceWeb;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +31,22 @@ public class ProductsController {
                 put("body", productDtos);
             }});
         } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(e);
+        }
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getProductById(
+            @PathVariable(name = "id") Integer id
+    ) {
+        try {
+            ProductDto productDto = productsServiceWeb.getProductById(id);
+            return ResponseEntity.ok(new HashMap<String, Object>(){{
+                put("message", "ok");
+                put("body", productDto);
+            }});
+        } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(500).body(e);
         }

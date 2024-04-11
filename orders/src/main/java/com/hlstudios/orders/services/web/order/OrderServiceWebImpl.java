@@ -1,9 +1,11 @@
 package com.hlstudios.orders.services.web.order;
 
 import com.hlstudios.orders.dto.OrderDto;
+import com.hlstudios.orders.dto.ProductDto;
 import com.hlstudios.orders.entites.Order;
 import com.hlstudios.orders.entites.OrderShipping;
 import com.hlstudios.orders.entites.ShippingArticle;
+import com.hlstudios.orders.services.clients.ProductsServiceClient;
 import com.hlstudios.orders.services.datasource.article.ShippingArticleService;
 import com.hlstudios.orders.services.datasource.order.OrderService;
 import com.hlstudios.orders.services.datasource.shipping.OrderShippingService;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class OrderServiceWebImpl implements OrderServiceWeb {
 
+    final ProductsServiceClient productsServiceClient;
     final OrderService orderService;
     final OrderShippingService orderShippingService;
     final ShippingArticleService shippingArticleService;
@@ -32,13 +35,15 @@ public class OrderServiceWebImpl implements OrderServiceWeb {
             OrderShippingService orderShippingService,
             ShippingArticleService shippingArticleService,
             ModelMapper modelMapper,
-            DtoParser dtoParser
+            DtoParser dtoParser,
+            ProductsServiceClient productsServiceClient
     ){
         this.orderService = orderService;
         this.orderShippingService = orderShippingService;
         this.shippingArticleService = shippingArticleService;
         this.modelMapper = modelMapper;
         this.dtoParser = dtoParser;
+        this.productsServiceClient = productsServiceClient;
     }
 
     @Override
@@ -83,6 +88,7 @@ public class OrderServiceWebImpl implements OrderServiceWeb {
     @Override
     public OrderDto createOrder(OrderDto orderDto) {
         //orderDto.setCreationDate(Instant.now().toString());
+
         Order order = dtoParser.parseDtoToOrder(orderDto);
         Order result = orderService.add(order);
 

@@ -38,7 +38,6 @@ services:
       - "8888:8888"
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - GITHUB_TOKEN=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
     networks:
       - spring_network
 
